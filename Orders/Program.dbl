@@ -202,8 +202,7 @@ Order_header,
 ;Order detail processing
 ;
 Order_detail,
-
-	clear count
+	clear count, max
 	xcall create_window(detail_id,"DETAIL",10,60,8,15,"")
 
 	xcall display_text(detail_id,2,2,"  Part code:")
@@ -212,15 +211,14 @@ Order_detail,
 
 	repeat
 	begin
-		data t_mod, d2
 		incr count
 		xcall s_bld(temp,,"Order Detail (Entering item %d of %d)",count,max)
 		xcall w_brdr(detail_id,WB_TITLE,%atrim(temp))
 
 		xcall input(detail_id,2,15,^m(strDetail[count].od_part,m_handle))
 
-		t_mod = count/3
-		if count == t_mod*3
+		max = count/3
+		if count == max*3
 			call Extend_dynamic_memory
 
 		if ^m(strDetail[count].od_part,m_handle).eqs.""
@@ -239,7 +237,6 @@ Order_detail,
 	end
 
 	xcall delete_window(detail_id)
-
 	return
 
 ;----------------------------------------
